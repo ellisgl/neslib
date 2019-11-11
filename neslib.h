@@ -234,7 +234,39 @@ void __fastcall__ oam_clear_fast(void);
 void __fastcall__ oam_meta_spr_pal(unsigned char x,unsigned char y,unsigned char pal,const unsigned char *metasprite);
 void __fastcall__ oam_meta_spr_clip(signed int x,unsigned char y,const unsigned char *metasprite);
 
+// Switch the *swappable* PRG bank to a specified bank.
+// See mmc1_set_config_flags for info on which PRG bank is switched.
+// bank_id: The bank to switch to
+void __fastcall__ mmc1_set_prg_bank(unsigned char bank_id);
 
+// Switch the upper CHR bank (0x0000-0x0FFF) to a specified bank.
+// bank_id: The bank to switch to
+void __fastcall__ mmc1_set_chr_bank_0(unsigned char bank_id);
+
+// Switch the lower CHR bank (0x1000-0x1FFF) to a specified bank.
+// Assumes MMC1_CHRMODE_SWITCH_4K is set.
+// bank_id: The bank to switch to
+void __fastcall__ mmc1_set_chr_bank_1(unsigned char bank_id);
+
+// Set the current MMC1 control register flags.
+// Or-together the appropriate bit flags.
+// https://wiki.nesdev.com/w/index.php/MMC1#Control_.28internal.2C_.248000-.249FFF.29
+//
+// Example: horizontal nametable mirroring, fixed upper PRG bank (0x8000-0xBFFF) / swappable lower PRG bank (0xC000-0xFFFF), switch separate 4 KB CHR banks:
+//   mmc1_set_config_flags(MMC1_MIRROR_HORIZONTAL | MMC1_PRGMODE_SWITCH_LOW8K | MMC1_CHRMODE_SWITCH_4K)
+//
+// Example: vertical nametable mirroring, swappable upper PRG bank / fixed lower PRG bank, switch 8 KB CHR banks:
+//   mmc1_set_config_flags(MMC1_MIRROR_VERTICAL | MMC1_PRGMODE_SWITCH_HIGH8K | MMC1_CHRMODE_SWITCH_8K)
+#define MMC1_MIRROR_LOWER_BANK     0x00 // (0<<0)
+#define MMC1_MIRROR_UPPER_BANK     0x01 // (1<<0)
+#define MMC1_MIRROR_VERTICAL       0x02 // (2<<0)
+#define MMC1_MIRROR_HORIZONTAL     0x03 // (3<<0)
+#define MMC1_PRGMODE_SWITCH_32K    0x04 // (1<<2)
+#define MMC1_PRGMODE_SWITCH_LOW8K  0x08 // (2<<2)
+#define MMC1_PRGMODE_SWITCH_HIGH8K 0x0C // (3<<2)
+#define MMC1_CHRMODE_SWITCH_8K     0x00 // (0<<4)
+#define MMC1_CHRMODE_SWITCH_4K     0x10 // (1<<4)
+void __fastcall__ mmc1_set_config_flags(unsigned char config_flags);
 
 #define PAD_A			0x01
 #define PAD_B			0x02

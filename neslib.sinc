@@ -1238,4 +1238,36 @@ palBrightTable8:
 	.byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
 	.byte $30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30,$30
 
+.export _mmc1_set_prg_bank, _mmc1_set_chr_bank_0, _mmc1_set_chr_bank_1, _mmc1_set_config_flags
+
+; void __fastcall__ mmc1_set_prg_bank(unsigned char bank_id)
+
+_mmc1_set_prg_bank:
+    ; Store the PRG bank_id in case the NMI handler wants to bankswitch
+    ldx MMC1_PRG_BANKNUM
+    sta MMC1_PRG_BANKNUM
+    mmc1_register_write MMC1_PRG_REG
+    txa
+    rts
+
+; void __fastcall__ mmc1_set_chr_bank_0(unsigned char bank_id)
+
+_mmc1_set_chr_bank_0:
+    mmc1_register_write MMC1_CHR0_REG
+    rts
+
+; void __fastcall__ mmc1_set_chr_bank_1(unsigned char bank_id)
+
+_mmc1_set_chr_bank_1:
+    mmc1_register_write MMC1_CHR1_REG
+    rts
+
+; void __fastcall__ mmc1_set_config_flags(unsigned char config_flags)
+
+; Control register config
+
+_mmc1_set_config_flags:
+    mmc1_register_write MMC1_CTRL_REG
+    rts
+
 	.include "famitone2.sinc"

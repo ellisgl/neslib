@@ -8,7 +8,7 @@ FT_SFX_STREAMS			= 4		;number of sound effects played at once, 1..4
 .define FT_DPCM_ENABLE  0			;undefine to exclude all DMC code
 .define FT_SFX_ENABLE   1			;undefine to exclude all sound effects code
 
-
+.include "mmc1_macros.sinc"
 
 	.export _exit,__STARTUP__:absolute=1
 	.import initlib,push0,popa,popax,_main,zerobss,copydata
@@ -76,6 +76,8 @@ RAND_SEED: 		.res 2
 FT_TEMP: 		.res 3
 
 TEMP: 			.res 11
+
+MMC1_PRG_BANKNUM:   .res 1
 
 PAD_BUF			=TEMP+1
 
@@ -262,4 +264,3 @@ sounds_data:
 	.word nmi	;$fffa vblank nmi
 	.word start	;$fffc reset
 	.word irq	;$fffe irq / brk
-
