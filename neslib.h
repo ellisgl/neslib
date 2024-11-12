@@ -36,13 +36,13 @@
 
 
 // set bg and spr palettes, data is 32 bytes array
-void __fastcall__ pal_all(const char *data);
+void __fastcall__ pal_all(const unsigned char *data);
 
 // set bg palette only, data is 16 bytes array
-void __fastcall__ pal_bg(const char *data);
+void __fastcall__ pal_bg(const unsigned char *data);
 
 // set spr palette only, data is 16 bytes array
-void __fastcall__ pal_spr(const char *data);
+void __fastcall__ pal_spr(const unsigned char *data);
 
 // set a palette entry, index is 0..31
 void __fastcall__ pal_col(unsigned char index, unsigned char color);
@@ -294,9 +294,15 @@ void __fastcall__ mmc1_set_config_flags(unsigned char config_flags);
 #define NAMETABLE_C		0x2800
 #define NAMETABLE_D		0x2c00
 
+#ifndef NULL
 #define NULL			0
+#endif
+#ifndef TRUE
 #define TRUE			1
+#endif
+#ifndef FALSE
 #define FALSE			0
+#endif
 
 #define NT_UPD_HORZ		0x40
 #define NT_UPD_VERT		0x80
