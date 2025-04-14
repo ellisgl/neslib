@@ -562,6 +562,9 @@ _vram_unrle:
 
 	cmp <RLE_TAG
 	beq @2
+
+@is_literal:
+
 	sta PPU_DATA
 	sta <RLE_BYTE
 	bne @1
@@ -575,6 +578,13 @@ _vram_unrle:
 	inc <RLE_HIGH
 
 @21:
+
+	cmp#$01
+	bcs @is_run
+	lda <_RLE_TAG
+	bcc @is_literal
+
+@is_run:
 
 	tax
 	lda <RLE_BYTE
