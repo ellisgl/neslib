@@ -8,7 +8,7 @@ FT_SFX_STREAMS			= 4		;number of sound effects played at once, 1..4
 .define FT_DPCM_ENABLE  0			;undefine to exclude all DMC code
 .define FT_SFX_ENABLE   1			;undefine to exclude all sound effects code
 
-.include "mmc1_macros.sinc"
+.include "mmc1_macros.s"
 
 	.export _exit,__STARTUP__:absolute=1
 	.import initlib,push0,popa,popax,_main,zerobss,copydata
@@ -239,18 +239,18 @@ detectNTSC:
 
 	jmp _main			;no parameters
 
-	.include "display.sinc"
+	.include "display.s"
 
-	.include "neslib.sinc"
+	.include "neslib.s"
 
 .segment "RODATA"
 
 music_data:
-;	.include "music.sinc"
+;	.include "music.s"
 
 .if(FT_SFX_ENABLE)
 sounds_data:
-;	.include "sounds.sinc"
+;	.include "sounds.s"
 .endif
 
 .segment "SAMPLES"

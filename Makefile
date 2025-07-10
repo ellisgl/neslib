@@ -2,7 +2,7 @@
 
 all: crt0.o
 
-crt0.o: $(wildcard *.s *.sinc)
+crt0.o: $(wildcard *.s)
 	cl65 -t nes -Oisr -c crt0.s
 
 clean:

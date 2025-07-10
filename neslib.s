@@ -1281,4 +1281,4 @@ _mmc1_set_config_flags:
     mmc1_register_write MMC1_CTRL_REG
     rts
 
-	.include "famitone2.sinc"
+	.include "famitone2.s"
