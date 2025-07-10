@@ -1,7 +1,7 @@
 /*
  (C) 2015 Alex Semenov (Shiru)
  (C) 2016 Lauri Kasanen
-
+ (C) 2025 EllisGL
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
   arising from the use of this software.
@@ -23,6 +23,7 @@
 // Feel free to do anything you want with this code, consider it Public Domain
 
 // Versions history:
+//  100725 - Added ifndefs for C++ compatibility (kills warning / errors in Visual Studio)
 //  280215 - fixed palette glitch caused with the active DMC DMA glitch
 //  030914 - minor fixes in the vram update system
 //  310814 - added vram_flush_update
@@ -31,9 +32,8 @@
 //  060414 - many fixes and improvements, including sequental VRAM updates
 //  previous versions were created since mid-2011, there were many updates
 
-
-
-
+#ifndef __fastcall__
+#define __fastcall__
 
 // set bg and spr palettes, data is 32 bytes array
 void __fastcall__ pal_all(const unsigned char *data);
@@ -133,8 +133,6 @@ void __fastcall__ sfx_play(unsigned char sound, unsigned char channel);
 // play a DPCM sample, 1..63
 void __fastcall__ sample_play(unsigned char sample);
 
-
-
 // poll controller and return flags like PAD_LEFT etc, input is pad number (0 or 1)
 unsigned char __fastcall__ pad_poll(unsigned char pad);
 
@@ -145,7 +143,6 @@ unsigned char __fastcall__ pad_trigger(unsigned char pad);
 
 // get previous pad state without polling ports
 unsigned char __fastcall__ pad_state(unsigned char pad);
-
 
 // set scroll, including rhe top bits
 // it is always applied at beginning of a TV frame, not at the function call
@@ -158,14 +155,11 @@ void __fastcall__ scroll(unsigned int x, unsigned int y);
 // warning: only X scroll could be changed in this version
 void __fastcall__ split(unsigned int x, unsigned int y);
 
-
 // select current chr bank for sprites, 0..1
 void __fastcall__ bank_spr(unsigned char n);
 
 // select current chr bank for background, 0..1
 void __fastcall__ bank_bg(unsigned char n);
-
-
 
 // get random number 0..255 or 0..65535
 unsigned char __fastcall__ rand8(void);
@@ -173,8 +167,6 @@ unsigned int  __fastcall__ rand16(void);
 
 // set random seed
 void __fastcall__ set_rand(unsigned int seed);
-
-
 
 // when display is enabled, vram access could only be done with this vram update system
 // the function sets a pointer to the update buffer that contains data and addresses
@@ -191,11 +183,9 @@ void __fastcall__ set_rand(unsigned int seed);
 //  NT_UPD_EOF to mark end of the buffer
 
 // length of this data should be under 256 bytes
-
 void __fastcall__ set_vram_update(unsigned char *buf);
 
 // all following vram functions only work when display is disabled
-
 // do a series of VRAM writes, the same format as for set_vram_update, but writes done right away
 void __fastcall__ flush_vram_update(unsigned char *buf);
 
@@ -217,7 +207,6 @@ void __fastcall__ vram_read(unsigned char *dst, unsigned int size);
 // write a block to current address of vram, works only when rendering is turned off
 void __fastcall__ vram_write(const unsigned char *src, unsigned int size);
 
-
 // unpack RLE data to current address of vram, mostly used for nametables
 void __fastcall__ vram_unrle(const unsigned char *data);
 
@@ -230,8 +219,6 @@ void __fastcall__ vram_unlz4(const unsigned char *in, unsigned char *out,
 	- uncompressed takes 1.3 frames
 	- lz4 takes 2.8 frames
 */
-
-
 // like memset, but does not return anything
 void __fastcall__ memfill(void *dst, unsigned char value, unsigned int len);
 
@@ -318,13 +305,12 @@ void __fastcall__ mmc1_set_config_flags(unsigned char config_flags);
 #define NT_UPD_EOF		0xff
 
 // macro to calculate nametable address from X,Y in compile time
-
 #define NTADR_A(x,y)	 	(NAMETABLE_A|(((y)<<5)|(x)))
 #define NTADR_B(x,y) 		(NAMETABLE_B|(((y)<<5)|(x)))
 #define NTADR_C(x,y) 		(NAMETABLE_C|(((y)<<5)|(x)))
 #define NTADR_D(x,y) 		(NAMETABLE_D|(((y)<<5)|(x)))
 
 // macro to get MSB and LSB
-
 #define MSB(x)			(((x)>>8))
 #define LSB(x)			(((x)&0xff))
+#endif
